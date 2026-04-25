@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+#define SIZE 5
+#define MAX 999999
+
+int getSmallest(int d[], int used[]) {
+    int minimum = MAX, index = -1;
+
+    for (int i = 0; i < SIZE; i++) {
+        if (!used[i] && d[i] <= minimum) {
+            minimum = d[i];
+            index = i;
+     }
+    }
+    return index;
+}
+
+void shortestPath(int mat[SIZE][SIZE]) {
+    int distance[SIZE], taken[SIZE];
+
+    for (int i = 0; i < SIZE; i++) {
+        distance[i] = MAX;
+        taken[i] = 0;
+    }
+
+    distance[0] = 0;
+
+    for (int k = 0; k < SIZE; k++) {
+        int node = getSmallest(distance, taken);
+        if (node == -1)
+            break;
+
+        taken[node] = 1;
+
+        for (int j = 0; j < SIZE; j++) {
+            if (mat[node][j] > 0 && !taken[j]) {
+                if (distance[j] > distance[node] + mat[node][j]) {
+                    distance[j] = distance[node] + mat[node][j];
+          }
+          }
+         }
+         }
+
+    printf("\nNode \tDistance from Start\n");
+    for (int i = 0; i < SIZE; i++)
+        printf("%d --> %d\n", i, distance[i]);
+}
+
+int main() {
+    int matrix[SIZE][SIZE] = {
+        {0, 10, 0, 30, 100},
+        {10, 0, 50, 0, 0},
+        {0, 50, 0, 20, 10},
+        {30, 0, 20, 0, 60},
+        {100, 0, 10, 60, 0}
+    };
+
+    shortestPath(matrix);
+    return 0;
+}
